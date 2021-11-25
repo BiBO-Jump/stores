@@ -21,7 +21,7 @@ public class UserServiceTests {
     public void reg(){
         try{
             User user = new User();
-            user.setUsername("register1");
+            user.setUsername("test01");
             user.setPassword("123456");
            iuserService.reg(user);
            System.out.println("OK");
@@ -36,7 +36,12 @@ public class UserServiceTests {
     //登录用户验证测试
     @Test
     public void login() {
-        User user = iuserService.login("register1", "123456");
+        User user = iuserService.login("test01", "123456");
         System.out.println(user);
+    }
+
+    @Test
+    public void changePassword(){
+        iuserService.changePassword(18,"管理员","123456","root");
     }
 }

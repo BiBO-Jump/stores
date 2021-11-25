@@ -8,4 +8,6 @@ public interface IUserService {
     void reg(User user);
     //传用户名和密码，返回用户名，若没有，返回null
     User login(String username,String password);
+    //修改密码
+    void changePassword(Integer uid, String username, String oldPassword, String newPassword);
 }

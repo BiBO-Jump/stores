@@ -4,10 +4,7 @@ import com.up.stores.entity.User;
 
 import com.up.stores.mapper.UserMapper;
 import com.up.stores.service.IUserService;
-import com.up.stores.service.ex.InsertException;
-import com.up.stores.service.ex.PasswordNotMatchException;
-import com.up.stores.service.ex.UserNotFoundException;
-import com.up.stores.service.ex.UsernameDuplicateException;
+import com.up.stores.service.ex.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
@@ -98,6 +95,46 @@ public class UserServiceImpl implements IUserService {
         user.setAvatar(result.getAvatar());
         // 返回新的user对象
         return user;
+    }
+
+    //密码修改
+    @Override
+    public void changePassword(Integer uid, String username, String oldPassword, String newPassword) {
+        // 调用userMapper的findByUid()方法，根据参数uid查询用户数据
+        User result = userMapper.findByUid(uid);
+        // 检查查询结果是否为null
+        if (result == null) {
+            // 是：抛出UserNotFoundException异常
+            throw new UserNotFoundException("用户数据不存在");
+        }
+
+        // 检查查询结果中的isDelete是否为1
+        if (result.getIsDelete().equals(1)) {
+            // 是：抛出UserNotFoundException异常
+            throw new UserNotFoundException("用户数据不存在");
+        }
+
+        // 从查询结果中取出盐值
+        String salt = result.getSalt();
+        // 将参数oldPassword结合盐值加密，得到oldMd5Password
+        String oldMd5Password = getMD5Password(oldPassword, salt);
+        // 判断查询结果中的password与oldMd5Password是否不一致
+        if (!result.getPassword().contentEquals(oldMd5Password)) {
+            // 是：抛出PasswordNotMatchException异常
+            throw new PasswordNotMatchException("原密码错误");
+        }
+
+        // 将参数newPassword结合盐值加密，得到newMd5Password
+        String newMd5Password = getMD5Password(newPassword, salt);
+        // 创建当前时间对象
+        Date now = new Date();
+        // 调用userMapper的updatePasswordByUid()更新密码，并获取返回值
+        Integer rows = userMapper.updatePasswordByUid(uid, newMd5Password, username, now);
+        // 判断以上返回的受影响行数是否不为1
+        if (rows != 1) {
+            // 是：抛出UpdateException异常
+            throw new UpdateException("更新用户数据时出现未知错误，请联系系统管理员");
+        }
     }
 
     //声明MD5加密处理

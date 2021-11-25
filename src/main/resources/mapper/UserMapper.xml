@@ -21,4 +21,14 @@
     <select id="findByUsername" resultMap="UserEntityMap">
         SELECT * FROM t_user WHERE username = #{username}
     </select>
+
+    <!-- 根据uid更新用户的密码：Integer updatePasswordByUid-->
+    <update id="updatePasswordByUid">
+        UPDATE t_user SET password = #{password}, modified_user = #{modifiedUser}, modified_time = #{modifiedTime} WHERE uid = #{uid}
+    </update>
+
+    <!-- 根据用户id查询用户数据：User findByUid(Integer uid) -->
+    <select id="findByUid" resultMap="UserEntityMap">
+        SELECT * FROM t_user WHERE uid = #{uid}
+    </select>
 </mapper>
