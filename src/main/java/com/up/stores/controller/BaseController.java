@@ -1,9 +1,6 @@
 package com.up.stores.controller;
 
-import com.up.stores.service.ex.InsertException;
-import com.up.stores.service.ex.PasswordNotMatchException;
-import com.up.stores.service.ex.ServiceException;
-import com.up.stores.service.ex.UsernameDuplicateException;
+import com.up.stores.service.ex.*;
 import com.up.stores.until.JsonResult;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -26,15 +23,18 @@ public class BaseController {
         if (e instanceof UsernameDuplicateException) {
             result.setState(4000);
             result.setMessage("用户名已被占用");
-        } else if (e instanceof InsertException) {
-            result.setState(5000);
-            result.setMessage("插入数据产生未知异常");
-        }else if (e instanceof InsertException) {
-            result.setState(5001);
+        } else if (e instanceof UserNotFoundException) {
+            result.setState(4001);
             result.setMessage("插入数据不存在");
         } else if (e instanceof PasswordNotMatchException) {
-            result.setState(5002);
+            result.setState(4002);
+            result.setMessage("插入数据产生未知异常");
+        } else if (e instanceof InsertException) {
+            result.setState(5000);
             result.setMessage("用户名或密码错误的异常");
+        } else if (e instanceof UpdateException) {
+            result.setState(5001);
+            result.setMessage("更新数据时产生未知的异常");
         }
         return result;
     }

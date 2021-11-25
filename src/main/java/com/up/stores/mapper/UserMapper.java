@@ -22,4 +22,8 @@ public interface UserMapper{
             @Param("modifiedTime") Date modifiedTime);
 
     User findByUid(Integer uid);//根据id查询用户数据
+
+    Integer updateInfoByUid(User user);//根据uid更新用户资料,user封装用户id和新个人资料，返回行数
+
+
 }

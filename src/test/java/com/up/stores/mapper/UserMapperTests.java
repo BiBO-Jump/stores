@@ -33,14 +33,28 @@ public class UserMapperTests {
         System.out.println(result);
     }
 
+    //测试更新用户信息
     @Test
     public void updatePasswordByUid() {
-        userMapper.updatePasswordByUid(16,"8888","管理员",new Date());
+        userMapper.updatePasswordByUid(17,"8888","管理员",new Date());
     }
-
+    //测试修改的信息
     @Test
     public void findByUid() {
-        System.out.println(userMapper.findByUid(16));
+        System.out.println(userMapper.findByUid(17));
     }
 
+    //测试
+    @Test
+    public void updateInfoByUid() {
+        User user = new User();
+        user.setUid(17);
+        user.setPhone("17858802222");
+        user.setEmail("admin@gmail.com");
+        user.setGender(1);
+        user.setModifiedUser("系统管理员");
+        user.setModifiedTime(new Date());
+        Integer rows = userMapper.updateInfoByUid(user);
+        System.out.println("rows=" + rows);
+    }
 }

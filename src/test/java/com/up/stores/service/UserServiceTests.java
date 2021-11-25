@@ -40,8 +40,41 @@ public class UserServiceTests {
         System.out.println(user);
     }
 
+    //测试改变密码
     @Test
     public void changePassword(){
         iuserService.changePassword(18,"管理员","123456","root");
     }
+
+    //测试获取到用户名称
+    @Test
+    public void getByUid() {
+        try {
+            Integer uid = 18;
+            User user = iuserService.getByUid(uid);
+            System.out.println(user);
+        } catch (ServiceException e) {
+            System.out.println(e.getClass().getSimpleName());
+            System.out.println(e.getMessage());
+        }
+    }
+
+    //测试修改个人资料
+    @Test
+    public void changeInfo() {
+        try {
+            Integer uid = 18;
+            String username = "数据管理员";
+            User user = new User();
+            user.setPhone("15512328888");
+            user.setEmail("admin03@cy.cn");
+            user.setGender(2);
+            iuserService.changeInfo(uid, username, user);
+            System.out.println("OK");
+        } catch (ServiceException e) {
+            System.out.println(e.getClass().getSimpleName());
+            System.out.println(e.getMessage());
+        }
+    }
+
 }

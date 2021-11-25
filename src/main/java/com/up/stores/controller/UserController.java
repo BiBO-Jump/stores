@@ -43,9 +43,39 @@ public class UserController extends BaseController {
         session.setAttribute("uid",data.getUid());
         session.setAttribute("username",data.getUsername());
         //获取session中绑定的数据
-        System.out.println(getuidFromSession(session));
-        System.out.println(getUsernameFromSession(session));
+        System.out.println("数据库行数:"+getuidFromSession(session));
+        System.out.println("用户"+getUsernameFromSession(session)+"登录成功！");
         return new JsonResult<User>(OK,data);
+    }
+    @RequestMapping("change_password")
+    public JsonResult<Void> changePassword(String oldPassword,
+                                           String newPassword,
+                                           HttpSession session){
+        Integer uid = getuidFromSession(session);
+        String username = getUsernameFromSession(session);
+        userService.changePassword(uid,username,oldPassword,newPassword);
+        return new JsonResult<Void>(OK);
+    }
+
+    @RequestMapping("get_by_uid")
+    public JsonResult<User> getByUid(HttpSession session) {
+        // 从HttpSession对象中获取uid
+        Integer uid = getuidFromSession(session);
+        // 调用业务对象执行获取数据
+        User data = userService.getByUid(uid);
+        // 响应成功和数据
+        return new JsonResult<User>(OK, data);
+    }
+
+    @RequestMapping("change_info")
+    public JsonResult<Void> changeInfo(User user,HttpSession session){
+        // 从HttpSession对象中获取uid和username
+        Integer uid = getuidFromSession(session);
+        String username = getUsernameFromSession(session);
+        // 调用业务对象执行修改用户资料
+        userService.changeInfo(uid, username, user);
+        // 响应成功
+        return new JsonResult<Void>(OK);
     }
 }
 //    @RequestMapping("reg")

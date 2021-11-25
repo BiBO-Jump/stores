@@ -137,6 +137,67 @@ public class UserServiceImpl implements IUserService {
         }
     }
 
+    //获取当前登录用户的信息
+    @Override
+    public User getByUid(Integer uid) {
+        // 调用userMapper的findByUid()方法，根据参数uid查询用户数据
+        User result = userMapper.findByUid(uid);
+        // 判断查询结果是否为null
+        if (result == null) {
+            // 是：抛出UserNotFoundException异常
+            throw new UserNotFoundException("用户数据不存在");
+        }
+
+        // 判断查询结果中的isDelete是否为1
+        if (result.getIsDelete().equals(1)) {
+            // 是：抛出UserNotFoundException异常
+            throw new UserNotFoundException("用户数据不存在");
+        }
+
+        // 创建新的User对象
+        User user = new User();
+        // 将以上查询结果中的username/phone/email/gender封装到新User对象中
+        user.setUsername(result.getUsername());
+        user.setPhone(result.getPhone());
+        user.setEmail(result.getEmail());
+        user.setGender(result.getGender());
+
+        // 返回新的User对象
+        return user;
+    }
+
+    //修改用户个人资料
+    @Override
+    public void changeInfo(Integer uid, String username, User user) {
+        // 调用userMapper的findByUid()方法，根据参数uid查询用户数据
+        User result = userMapper.findByUid(uid);
+        // 判断查询结果是否为null
+        if (result == null) {
+            // 是：抛出UserNotFoundException异常
+            throw new UserNotFoundException("用户数据不存在");
+        }
+
+        // 判断查询结果中的isDelete是否为1
+        if (result.getIsDelete().equals(1)) {
+            // 是：抛出UserNotFoundException异常
+            throw new UserNotFoundException("用户数据不存在");
+        }
+
+        // 向参数user中补全数据：uid
+        user.setUid(uid);
+        // 向参数user中补全数据：modifiedUser(username)
+        user.setModifiedUser(username);
+        // 向参数user中补全数据：modifiedTime(new Date())
+        user.setModifiedTime(new Date());
+        // 调用userMapper的updateInfoByUid(User user)方法执行修改，并获取返回值
+        Integer rows = userMapper.updateInfoByUid(user);
+        // 判断以上返回的受影响行数是否不为1
+        if (rows != 1) {
+            // 是：抛出UpdateException异常
+            throw new UpdateException("更新用户数据时出现未知错误，请联系系统管理员");
+        }
+    }
+
     //声明MD5加密处理
     private String getMD5Password(String password, String salt) {
 

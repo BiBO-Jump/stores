@@ -262,6 +262,53 @@
 			</div>
 		</footer>
 		<!--页脚结束-->
+		<script type="text/javascript">
+			$(document).ready(function() {
+				$.ajax({
+					url: "/users/get_by_uid",
+					type: "GET",
+					dataType: "json",
+					success: function(json) {
+						if (json.state == 200) {
+							console.log("username=" + json.data.username);
+							console.log("phone=" + json.data.phone);
+							console.log("email=" + json.data.email);
+							console.log("gender=" + json.data.gender);
+
+							$("#username").val(json.data.username);
+							$("#phone").val(json.data.phone);
+							$("#email").val(json.data.email);
+
+							let radio = json.data.gender == 0 ? $("#gender-female") : $("#gender-male");
+							radio.prop("checked", "checked");
+						} else {
+							alert("获取用户信息失败！" + json.message);
+						}
+					}
+				});
+			});
+
+			$("#btn-change-info").click(function() {
+				$.ajax({
+					url: "/users/change_info",
+					type: "POST",
+					data: $("#form-change-info").serialize(),
+					dataType: "json",
+					success: function(json) {
+						if (json.state == 200) {
+							alert("修改成功！");
+							location.href = "login.html";
+						} else {
+							alert("修改失败！" + json.message);
+						}
+					},
+					error: function(xhr) {
+						alert("您的登录信息已经过期，请重新登录！HTTP响应码：" + xhr.status);
+						location.href = "login.html";
+					}
+				});
+			});
+		</script>
 	</body>
 
 </html>

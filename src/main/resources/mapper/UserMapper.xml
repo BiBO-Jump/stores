@@ -31,4 +31,15 @@
     <select id="findByUid" resultMap="UserEntityMap">
         SELECT * FROM t_user WHERE uid = #{uid}
     </select>
+
+    <!-- 根据uid更新用户个人资料：Integer updateInfoByUid(User user) -->
+    <update id="updateInfoByUid">
+        UPDATE t_user SET
+        <if test="phone != null">phone = #{phone},</if>
+        <if test="email != null">email = #{email},</if>
+        <if test="gender != null">gender = #{gender},</if>
+        modified_user = #{modifiedUser},
+        modified_time = #{modifiedTime}
+        WHERE uid = #{uid}
+    </update>
 </mapper>

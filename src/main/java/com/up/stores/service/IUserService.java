@@ -10,4 +10,8 @@ public interface IUserService {
     User login(String username,String password);
     //修改密码
     void changePassword(Integer uid, String username, String oldPassword, String newPassword);
+    //获取当前登录用户的信息,返回当前的登录用户的信息
+    User getByUid(Integer uid);
+    //修改用户个人资料
+    void changeInfo(Integer uid,String username,User user);
 }
