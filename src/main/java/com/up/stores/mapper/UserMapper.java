@@ -25,5 +25,10 @@ public interface UserMapper{
 
     Integer updateInfoByUid(User user);//根据uid更新用户资料,user封装用户id和新个人资料，返回行数
 
+    Integer updateAvatarByUid(
+            @Param("uid") Integer uid,
+            @Param("avatar") String avatar,
+            @Param("modifiedUser") String modifiedUser,
+            @Param("modifiedTime") Date modifiedTime);
 
 }

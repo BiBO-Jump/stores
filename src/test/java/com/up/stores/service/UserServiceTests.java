@@ -77,4 +77,12 @@ public class UserServiceTests {
         }
     }
 
+    //测试上传用户头像图片
+    @Test
+    public void changAvatar(){
+        iuserService.changeAvatar(
+                18,"小明","/upload/test.png"
+        );
+    }
+
 }

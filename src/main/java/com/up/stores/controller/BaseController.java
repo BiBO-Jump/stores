@@ -1,5 +1,6 @@
 package com.up.stores.controller;
 
+import com.up.stores.controller.ex.*;
 import com.up.stores.service.ex.*;
 import com.up.stores.until.JsonResult;
 import org.springframework.stereotype.Controller;
@@ -17,7 +18,7 @@ public class BaseController {
     public static final int OK = 200;
 
     /** @ExceptionHandler用于统一处理方法抛出的异常 */
-    @ExceptionHandler(ServiceException.class)
+    @ExceptionHandler({ServiceException.class,FileUploadIOException.class})
     public JsonResult<Void> handleException(Throwable e) {
         JsonResult<Void> result = new JsonResult<Void>(e);
         if (e instanceof UsernameDuplicateException) {
@@ -35,6 +36,16 @@ public class BaseController {
         } else if (e instanceof UpdateException) {
             result.setState(5001);
             result.setMessage("更新数据时产生未知的异常");
+        } else if (e instanceof FileEmptyException) {
+            result.setState(6000);
+        } else if (e instanceof FileSizeException) {
+            result.setState(6001);
+        } else if (e instanceof FileTypeException) {
+            result.setState(6002);
+        } else if (e instanceof FileStateException) {
+            result.setState(6003);
+        } else if (e instanceof FileUploadIOException) {
+            result.setState(6004);
         }
         return result;
     }

@@ -42,4 +42,13 @@
         modified_time = #{modifiedTime}
         WHERE uid = #{uid}
     </update>
+
+    <!-- 根据uid更新用户的头像-->
+    <update id="updateAvatarByUid">
+        UPDATE t_user SET
+        avatar = #{avatar},
+        modified_user = #{modifiedUser},
+        modified_time = #{modifiedTime}
+        WHERE uid = #{uid}
+    </update>
 </mapper>

@@ -14,4 +14,6 @@ public interface IUserService {
     User getByUid(Integer uid);
     //修改用户个人资料
     void changeInfo(Integer uid,String username,User user);
+    //上传用户头像
+    void changeAvatar(Integer uid, String username,String avatar );
 }

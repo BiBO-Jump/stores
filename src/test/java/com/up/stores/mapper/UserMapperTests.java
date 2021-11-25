@@ -44,7 +44,7 @@ public class UserMapperTests {
         System.out.println(userMapper.findByUid(17));
     }
 
-    //测试
+    //测试个人资料
     @Test
     public void updateInfoByUid() {
         User user = new User();
@@ -56,5 +56,14 @@ public class UserMapperTests {
         user.setModifiedTime(new Date());
         Integer rows = userMapper.updateInfoByUid(user);
         System.out.println("rows=" + rows);
+    }
+
+    @Test
+    public void updateAvatarByUid() {
+        userMapper.updateAvatarByUid(
+                17,
+                "/upload/avatar.png",
+                "管理员",
+                new Date());
     }
 }
