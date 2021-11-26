@@ -154,6 +154,9 @@
 						if (json.state == 200) {
 							alert("登录成功！");
 							location.href = "index.html";
+							//	头像保存至cookie
+							$.cookie("avatar", json.data.avatar, {expires: 7});
+							console.log("cookie中的avatar=" + $.cookie("avatar"));
 						} else {
 							alert("登录失败！" + json.message);
 						}

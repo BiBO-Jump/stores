@@ -13,6 +13,7 @@
 		<link href="../bootstrap3/css/bootstrap.css" rel="stylesheet" type="text/css">
 		<script src="../bootstrap3/jquery-1.9.1.min.js"></script>
 		<script src="../bootstrap3/js/bootstrap.js"></script>
+		<script src="../bootstrap3/js/jquery.cookie.js" type="text/javascript" charset="utf-8"></script>
 		<!-- 字体图标 -->
 		<link rel="stylesheet" href="../bootstrap3/font-awesome-4.7.0/css/font-awesome.css" />
 		<link rel="stylesheet" type="text/css" href="../css/layout.css" />
@@ -136,11 +137,11 @@
 					</ul>
 					<div class="panel-body">
 						<!--上传头像表单开始-->
-						<form action="/users/change_avatar" method="post" enctype="multipart/form-data" class="form-horizontal" role="form">
+						<form id="form-change-avatar" class="form-horizontal" role="form">
 							<div class="form-group">
 								<label class="col-md-2 control-label">选择头像:</label>
 								<div class="col-md-5">
-									<img id="img-avatar" src="../images/index/user.jpg" class="img-responsive" />
+									<img id="img-avatar" src="../images/index/user.png" class="img-responsive"/>
 								</div>
 								<div class="clearfix"></div>
 								<div class="col-md-offset-2 col-md-4">
@@ -149,7 +150,7 @@
 							</div>
 							<div class="form-group">
 								<div class="col-sm-offset-2 col-sm-10">
-									<input type="submit" class="btn btn-primary" value="上传" />
+									<input id="btn-change-avatar" type="button" class="btn btn-primary" value="上传" />
 								</div>
 							</div>
 						</form>
@@ -242,6 +243,37 @@
 			</div>
 		</footer>
 		<!--页脚结束-->
+		<script type="text/javascript">
+			//cookie获取头像
+			$(document).ready(function () {
+				console.log("cookie中的avatar=" + $.cookie("avatar"));
+				$("#img-avatar").attr("src", $.cookie("avatar"));
+			});
+
+			$("#btn-change-avatar").click(function() {
+				$.ajax({
+					url: "/users/change_avatar",
+					type: "POST",
+					data: new FormData($("#form-change-avatar")[0]),
+					dataType: "JSON",
+					processData: false, // processData处理数据
+					contentType: false, // contentType发送数据的格式
+					success: function(json) {
+						if (json.state == 200) {
+							$("#img-avatar").attr("src", json.data);
+							//显示最新头像
+							$.cookie("avatar", json.data, {expires: 7});
+						} else {
+							alert("修改失败！" + json.message);
+						}
+					},
+					error: function(xhr) {
+						alert("您的登录信息已经过期，请重新登录！HTTP响应码：" + xhr.status);
+						location.href = "login.html";
+					}
+				});
+			});
+		</script>
 	</body>
 
 </html>
