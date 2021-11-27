@@ -30,6 +30,9 @@ public class BaseController {
         } else if (e instanceof PasswordNotMatchException) {
             result.setState(4002);
             result.setMessage("插入数据产生未知异常");
+        }else if (e instanceof AddressCountLimitException) {
+            result.setState(4003);
+            result.setMessage("用户的收货地址超出上限异常");
         } else if (e instanceof InsertException) {
             result.setState(5000);
             result.setMessage("用户名或密码错误的异常");

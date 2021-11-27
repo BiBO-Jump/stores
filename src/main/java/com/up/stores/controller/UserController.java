@@ -48,7 +48,7 @@ public class UserController extends BaseController {
         session.setAttribute("uid",data.getUid());
         session.setAttribute("username",data.getUsername());
         //获取session中绑定的数据
-        System.out.println("数据库行数:"+getuidFromSession(session));
+        System.out.println("uid:"+getuidFromSession(session));
         System.out.println("用户"+getUsernameFromSession(session)+"登录成功！");
         return new JsonResult<User>(OK,data);
     }

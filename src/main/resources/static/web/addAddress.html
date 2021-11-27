@@ -19,8 +19,9 @@
 		<link rel="stylesheet" type="text/css" href="../css/layout.css" />
 		<link rel="stylesheet" type="text/css" href="../css/top.css" />
 		<link rel="stylesheet" type="text/css" href="../css/footer.css" />
-		<script type="text/javascript" src="../js/distpicker.data.js"></script>
-		<script type="text/javascript" src="../js/distpicker.js"></script>
+
+<!--		<script type="text/javascript" src="../js/distpicker.data.js"></script>-->
+<!--		<script type="text/javascript" src="../js/distpicker.js"></script>-->
 	</head>
 
 	<body>
@@ -287,6 +288,166 @@
 			</div>
 		</footer>
 		<!--页脚结束-->
-	</body>
+		<script type="text/javascript">
+			$("#btn-add-new-address").click(function() {
+				$.ajax({
+					url: "/addresses/add_new_address",
+					type: "POST",
+					data: $("#form-add-new-address").serialize(),
+					dataType: "JSON",
+					success: function(json) {
+						if (json.state == 200) {
+							alert("新增收货地址成功！");
 
+						} else {
+							alert("新增收货地址失败！" + json.message);
+						}
+					},
+					error: function(xhr) {
+						alert("您的登录信息已经过期，请重新登录！HTTP响应码：" + xhr.status);
+						location.href = "login.html";
+					}
+				});
+			});
+		</script>
+
+		<script type="text/javascript">
+			let defaultOption = '<option value="0">----- 请选择 -----</option>';
+
+			$(document).ready(function() {
+				showProvinceList();
+				$("#city-list").append(defaultOption);
+				$("#area-list").append(defaultOption);
+			});
+
+			$("#province-list").change(function() {
+				showCityList();
+			});
+
+			$("#city-list").change(function() {
+				showAreaList();
+			});
+
+			function showProvinceList() {
+				$("#province-list").append(defaultOption);
+				$.ajax({
+					url: "/districts",
+					type: "GET",
+					data: "parent=86",
+					dataType: "JSON",
+					success: function(json) {
+						if (json.state == 200) {
+							let list = json.data;
+							console.log("count=" + list.length);
+							for (let i = 0; i < list.length; i++) {
+								console.log(list[i].name);
+								let option = '<option value="' + list[i].code + '">' + list[i].name + '</option>';
+								$("#province-list").append(option);
+							}
+						}
+					}
+				});
+			}
+
+			function showCityList() {
+				let parent = $("#province-list").val();
+				$("#city-list").empty();
+				$("#area-list").empty();
+
+				$("#city-list").append(defaultOption);
+				$("#area-list").append(defaultOption);
+
+				if (parent == 0) {
+					return;
+				}
+
+				$.ajax({
+					url: "/districts",
+					type: "GET",
+					data: "parent=" + parent,
+					dataType: "JSON",
+					success: function(json) {
+						if (json.state == 200) {
+							let list = json.data;
+							console.log("count=" + list.length);
+							for (let i = 0; i < list.length; i++) {
+								console.log(list[i].name);
+								let option = '<option value="' + list[i].code + '">' + list[i].name + '</option>';
+								$("#city-list").append(option);
+							}
+						}
+					}
+				});
+			}
+
+			function showAreaList() {
+				let parent = $("#city-list").val();
+				$("#area-list").empty();
+				$("#area-list").append(defaultOption);
+
+				if (parent == 0) {
+					return;
+				}
+
+				$.ajax({
+					url: "/districts",
+					type: "GET",
+					data: "parent=" + parent,
+					dataType: "JSON",
+					success: function(json) {
+						if (json.state == 200) {
+							let list = json.data;
+							console.log("count=" + list.length);
+							for (let i = 0; i < list.length; i++) {
+								console.log(list[i].name);
+								let option = '<option value="' + list[i].code + '">' + list[i].name + '</option>';
+								$("#area-list").append(option);
+							}
+						}
+					}
+				});
+			}
+		</script>
+		<script type="text/javascript">
+			$(document).ready(function () {
+				showAddressList();
+			});
+
+			function showAddressList() {
+				$("#address-list").empty();
+				$.ajax({
+					url: "/addresses",
+					type: "GET",
+					dataType: "JSON",
+					success: function (json) {
+						let list = json.data;
+						for (let i = 0; i < list.length; i++) {
+							console.log(list[i].name);
+							let address = '<tr>'
+									+ '<td>#{tag}</td>'
+									+ '<td>#{name}</td>'
+									+ '<td>#{province}#{city}#{area}#{address}</td>'
+									+ '<td>#{phone}</td>'
+									+ '<td><a class="btn btn-xs btn-info"><span class="fa fa-edit"></span> 修改</a></td>'
+									+ '<td><a class="btn btn-xs add-del btn-info"><span class="fa fa-trash-o"></span> 删除</a></td>'
+									+ '<td><a class="btn btn-xs add-def btn-default">设为默认</a></td>'
+									+ '</tr>';
+
+							address = address.replace(/#{aid}/g, list[i].aid);
+							address = address.replace(/#{tag}/g, list[i].tag);
+							address = address.replace("#{name}", list[i].name);
+							address = address.replace("#{province}", list[i].provinceName);
+							address = address.replace("#{city}", list[i].cityName);
+							address = address.replace("#{area}", list[i].areaName);
+							address = address.replace("#{address}", list[i].address);
+							address = address.replace("#{phone}", list[i].phone);
+
+							$("#address-list").append(address);
+						}
+						$(".add-def:eq(0)").hide();
+					}
+				});
+			}
+		</script>
+	</body>
 </html>

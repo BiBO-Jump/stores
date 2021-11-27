@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.up.stores.mapper.AddressMapper">
+    <resultMap id="AddressEntityMap" type="com.up.stores.entity.Address">
+        <id column="aid" property="aid"/>
+        <result column="province_code" property="provinceCode"/>
+        <result column="province_name" property="provinceName"/>
+        <result column="city_code" property="cityCode"/>
+        <result column="city_name" property="cityName"/>
+        <result column="area_code" property="areaCode"/>
+        <result column="area_name" property="areaName"/>
+        <result column="is_default" property="isDefault"/>
+        <result column="created_user" property="createdUser"/>
+        <result column="created_time" property="createdTime"/>
+        <result column="modified_user" property="modifiedUser"/>
+        <result column="modified_time" property="modifiedTime"/>
+    </resultMap>
+
+
+    <!-- 插入收货地址数据：Integer insert(Address address) -->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="aid">
+        INSERT INTO t_address (
+        uid, name, province_name, province_code, city_name, city_code, area_name, area_code, zip,
+        address, phone, tel,tag, is_default, created_user, created_time, modified_user, modified_time
+        ) VALUES (
+        #{uid}, #{name}, #{provinceName}, #{provinceCode}, #{cityName}, #{cityCode}, #{areaName},
+        #{areaCode}, #{zip}, #{address}, #{phone}, #{tel}, #{tag}, #{isDefault}, #{createdUser},
+        #{createdTime}, #{modifiedUser}, #{modifiedTime}
+        )
+    </insert>
+
+    <!-- 统计某用户的收货地址数据的数量：Integer countByUid(Integer uid) -->
+    <select id="countByUid" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM t_address WHERE uid=#{uid}
+    </select>
+
+    <!-- 查询某用户的收货地址列表数据：List<Address> findByUid(Integer uid) -->
+    <select id="findByUid" resultMap="AddressEntityMap">
+        SELECT * FROM t_address WHERE uid=#{uid} ORDER BY is_default DESC, created_time DESC
+    </select>
+</mapper>
