@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.up.stores.mapper.CartMapper">
+    <resultMap id="CartEntityMap" type="com.up.stores.entity.Cart">
+        <id column="cid" property="cid"/>
+        <result column="created_user" property="createdUser"/>
+        <result column="created_time" property="createdTime"/>
+        <result column="modified_user" property="modifiedUser"/>
+        <result column="modified_time" property="modifiedTime"/>
+    </resultMap>
+
+    <!-- 插入购物车数据：Integer insert(Cart cart) -->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="cid">
+        INSERT INTO t_cart (uid, pid, price, num, created_user, created_time, modified_user, modified_time)
+        VALUES (#{uid}, #{pid}, #{price}, #{num}, #{createdUser}, #{createdTime}, #{modifiedUser}, #{modifiedTime})
+    </insert>
+
+    <!-- 修改购物车数据中商品的数量： -->
+    <update id="updateNumByCid">
+        UPDATE t_cart SET num=#{num}, modified_user=#{modifiedUser}, modified_time=#{modifiedTime} WHERE cid=#{cid}
+    </update>
+
+    <!-- 根据用户id和商品id查询购物车中的数据-->
+    <select id="findByUidAndPid" resultMap="CartEntityMap">
+        SELECT * FROM t_cart WHERE uid=#{uid} AND pid=#{pid}
+    </select>
+
+    <!-- 查询某用户的购物车数据：List<CartVO> findVOByUid(Integer uid) -->
+    <select id="findVOByUid" resultType="com.up.stores.vo.CartVO">
+        SELECT cid, uid, pid, t_cart.price, t_cart.num, t_product.title, t_product.price AS realPrice, t_product.image
+        FROM t_cart LEFT JOIN t_product ON t_cart.pid = t_product.id
+        WHERE uid = #{uid} ORDER BY t_cart.created_time DESC
+    </select>
+
+    <!-- 根据购物车数据id查询购物车数据详情：Cart findByCid(Integer cid) -->
+    <select id="findByCid" resultMap="CartEntityMap">
+        SELECT * FROM t_cart WHERE cid = #{cid}
+    </select>
+</mapper>

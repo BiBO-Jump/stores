@@ -20,7 +20,7 @@
 		<link rel="stylesheet" type="text/css" href="../css/top.css" />
 		<link rel="stylesheet" type="text/css" href="../css/footer.css" />
 		<link rel="stylesheet" type="text/css" href="../css/cart.css" />
-		<script src="../js/cart.js" type="text/javascript" charset="utf-8"></script>
+<!--		<script src="../js/cart.js" type="text/javascript" charset="utf-8"></script>-->
 	</head>
 
 	<body>
@@ -274,7 +274,78 @@
 					location.href = "orderConfirm.html";
 				})
 			})
+			$(document).ready(function() {
+				showCartList();
+			});
+
+			function showCartList() {
+				$("#cart-list").empty();
+				$.ajax({
+					url: "/carts",
+					type: "GET",
+					dataType: "JSON",
+					success: function(json) {
+						let list = json.data;
+						for (let i = 0; i < list.length; i++) {
+							let tr = '<tr>'
+									+ '<td>'
+									+ 	'<input name="cids" value="#{cid}" type="checkbox" class="ckitem" />'
+									+ '</td>'
+									+ '<td><img src="..#{image}collect.png" class="img-responsive" /></td>'
+									+ '<td>#{title}#{msg}</td>'
+									+ '<td>¥<span id="price-#{cid}">#{realPrice}</span></td>'
+									+ '<td>'
+									+ 	'<input type="button" value="-" class="num-btn" onclick="reduceNum(1)" />'
+									+ 	'<input id="num-#{cid}" type="text" size="2" readonly="readonly" class="num-text" value="#{num}">'
+									+ 	'<input class="num-btn" type="button" value="+" onclick="addNum(#{cid})" />'
+									+ '</td>'
+									+ '<td>¥<span id="total-price-#{cid}">#{totalPrice}</span></td>'
+									+ '<td>'
+									+ 	'<input type="button" onclick="delCartItem(this)" class="cart-del btn btn-default btn-xs" value="删除" />'
+									+ '</td>'
+									+ '</tr>';
+							tr = tr.replace(/#{cid}/g, list[i].cid);
+							tr = tr.replace(/#{title}/g, list[i].title);
+							tr = tr.replace(/#{image}/g, list[i].image);
+							tr = tr.replace(/#{realPrice}/g, list[i].realPrice);
+							tr = tr.replace(/#{num}/g, list[i].num);
+							tr = tr.replace(/#{totalPrice}/g, list[i].realPrice * list[i].num);
+
+							if (list[i].realPrice < list[i].price) {
+								tr = tr.replace(/#{msg}/g, "比加入时降价" + (list[i].price - list[i].realPrice) + "元");
+							} else {
+								tr = tr.replace(/#{msg}/g, "");
+							}
+							$("#cart-list").append(tr);
+						}
+					}
+				});
+			}
+
+			function addNum(cid) {
+				$.ajax({
+					url: "/carts/" + cid + "/num/add",
+					type: "POST",
+					dataType: "JSON",
+					success: function(json) {
+						if (json.state == 200) {
+							// showCartList();
+							$("#num-" + cid).val(json.data);
+							let price = $("#price-" + cid).html();
+							let totalPrice = price * json.data;
+							$("#total-price-" + cid).html(totalPrice);
+						} else {
+							alert("增加商品数量失败！" + json.message);
+						}
+					},
+					error: function(xhr) {
+						alert("您的登录信息已经过期，请重新登录！HTTP响应码：" + xhr.status);
+						location.href = "login.html";
+					}
+				});
+			}
 		</script>
+
 	</body>
 
 </html>

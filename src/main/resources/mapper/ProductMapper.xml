@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.up.stores.mapper.ProductMapper">
+    <resultMap id="ProductEntityMap" type="com.up.stores.entity.Product">
+        <id column="id" property="id"/>
+        <result column="category_id" property="categoryId"/>
+        <result column="item_type" property="itemType"/>
+        <result column="sell_point" property="sellPoint"/>
+        <result column="created_user" property="createdUser"/>
+        <result column="created_time" property="createdTime"/>
+        <result column="modified_user" property="modifiedUser"/>
+        <result column="modified_time" property="modifiedTime"/>
+    </resultMap>
+
+    <!-- 查询热销商品的前四名：List<Product> findHostList() -->
+    <select id="findHotList" resultMap="ProductEntityMap">
+        SELECT * FROM t_product WHERE status=1 ORDER BY priority DESC LIMIT 0,4
+    </select>
+
+    <!-- 根据商品id查询商品详情：Product findById(Integer id) -->
+    <select id="findById" resultMap="ProductEntityMap">
+        SELECT * FROM t_product WHERE id=#{id}
+    </select>
+</mapper>

@@ -39,6 +39,12 @@ public class BaseController {
         } else if (e instanceof AccessDeniedException) {
             result.setState(4005);
             result.setMessage("用户收获地址数据非法访问的异常");
+        } else if (e instanceof ProductNotFoundException) {
+            result.setState(4006);
+            result.setMessage("商品数据不存在的异常");
+        } else if (e instanceof CartNotFoundException) {
+            result.setState(4007);
+            result.setMessage("购物车数据不存在的异常");
         } else if (e instanceof InsertException) {
             result.setState(5000);
             result.setMessage("用户名或密码错误的异常");

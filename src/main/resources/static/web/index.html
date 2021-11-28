@@ -290,6 +290,39 @@
 			</div>
 		</footer>
 		<!--页脚结束-->
+		<script type="text/javascript">
+			$(document).ready(function() {
+				showHotList();
+			});
+
+			function showHotList() {
+				$("#hot-list").empty();
+				$.ajax({
+					url: "/products/hot_list",
+					type: "GET",
+					dataType: "JSON",
+					success: function(json) {
+						let list = json.data;
+						console.log("count=" + list.length);
+						for (let i = 0; i < list.length; i++) {
+							console.log(list[i].title);
+							let html = '<div class="col-md-12">'
+									+ '<div class="col-md-7 text-row-2"><a href="product.html?id=#{id}">#{title}</a></div>'
+									+ '<div class="col-md-2">¥#{price}</div>'
+									+ '<div class="col-md-3"><img src="..#{image}collect.png" class="img-responsive" /></div>'
+									+ '</div>';
+
+							html = html.replace(/#{id}/g, list[i].id);
+							html = html.replace(/#{title}/g, list[i].title);
+							html = html.replace(/#{price}/g, list[i].price);
+							html = html.replace(/#{image}/g, list[i].image);
+
+							$("#hot-list").append(html);
+						}
+					}
+				});
+			}
+		</script>
 	</body>
 
 </html>
