@@ -44,4 +44,41 @@ public class AddressMapperTests {
             System.out.println(item);
         }
     }
+
+    @Test
+    public void updateNonDefaultByUid() {
+        Integer uid = 11;
+        Integer rows = addressMapper.updateNonDefaultByUid(uid);
+        System.out.println("rows=" + rows);
+    }
+
+    @Test
+    public void updateDefaultByAid() {
+        Integer aid = 11;
+        String modifiedUser = "管理员";
+        Date modifiedTime = new Date();
+        Integer rows = addressMapper.updateDefaultByAid(aid, modifiedUser, modifiedTime);
+        System.out.println("rows=" + rows);
+    }
+
+    @Test
+    public void findByAid() {
+        Integer aid = 11;
+        Address result = addressMapper.findByAid(aid);
+        System.out.println(result);
+    }
+
+    @Test
+    public void deleteByAid() {
+        Integer aid = 7;
+        Integer rows = addressMapper.deleteByAid(aid);
+        System.out.println("rows=" + rows);
+    }
+
+    @Test
+    public void findLastModified() {
+        Integer uid = 10;
+        Address result = addressMapper.findLastModified(uid);
+        System.out.println(result);
+    }
 }

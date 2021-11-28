@@ -30,15 +30,24 @@ public class BaseController {
         } else if (e instanceof PasswordNotMatchException) {
             result.setState(4002);
             result.setMessage("插入数据产生未知异常");
-        }else if (e instanceof AddressCountLimitException) {
+        } else if (e instanceof AddressCountLimitException) {
             result.setState(4003);
             result.setMessage("用户的收货地址超出上限异常");
+        } else if (e instanceof AddressNotFoundException) {
+            result.setState(4004);
+            result.setMessage("用户收获地址数据不存在");
+        } else if (e instanceof AccessDeniedException) {
+            result.setState(4005);
+            result.setMessage("用户收获地址数据非法访问的异常");
         } else if (e instanceof InsertException) {
             result.setState(5000);
             result.setMessage("用户名或密码错误的异常");
         } else if (e instanceof UpdateException) {
             result.setState(5001);
             result.setMessage("更新数据时产生未知的异常");
+        } else if (e instanceof DeleteException) {
+            result.setState(5002);
+            result.setMessage("删除地址数据时产生未知的异常");
         } else if (e instanceof FileEmptyException) {
             result.setState(6000);
         } else if (e instanceof FileSizeException) {

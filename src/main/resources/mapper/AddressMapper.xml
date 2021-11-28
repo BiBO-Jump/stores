@@ -40,4 +40,30 @@
     <select id="findByUid" resultMap="AddressEntityMap">
         SELECT * FROM t_address WHERE uid=#{uid} ORDER BY is_default DESC, created_time DESC
     </select>
+
+    <!-- 将某用户的所有收货地址设置为非默认地址：Integer updateNonDefaultByUid(Integer uid) -->
+    <update id="updateNonDefaultByUid">
+        UPDATE t_address SET is_default=0 WHERE uid=#{uid}
+    </update>
+
+    <!-- 将指定的收货地址设置为默认地址： Integer updateDefaultByAid @Param("aid") Integer aid, @Param("modifiedUser") String modifiedUser,@Param("modifiedTime") Date modifiedTime) -->
+    <update id="updateDefaultByAid">
+        UPDATE t_address SET is_default=1, modified_user=#{modifiedUser}, modified_time=#{modifiedTime} WHERE aid=#{aid}
+    </update>
+
+    <!-- 根据收货地址aid值，查询收货地址详情：Address findByAid(Integer aid) -->
+    <select id="findByAid" resultMap="AddressEntityMap">
+        SELECT * FROM t_address WHERE aid=#{aid}
+    </select>
+
+    <!-- 根据收货地址id删除数据：Integer deleteByAid(Integer aid) -->
+    <delete id="deleteByAid">
+        DELETE FROM t_address WHERE aid=#{aid}
+    </delete>
+
+    <!-- 查询某用户最后修改的收货地址：Address findLastModified(Integer uid) -->
+    <select id="findLastModified" resultMap="AddressEntityMap">
+        SELECT * FROM t_address WHERE uid=#{uid} ORDER BY modified_time DESC LIMIT 0,1
+    </select>
+
 </mapper>

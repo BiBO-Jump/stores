@@ -2,6 +2,7 @@ package com.up.stores.service;
 
 
 import com.up.stores.entity.Address;
+import com.up.stores.service.ex.ServiceException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,34 @@ public class AddressServiceTests {
         System.out.println("count=" + list.size());
         for (Address item : list) {
             System.out.println(item);
+        }
+    }
+
+    @Test
+    public void setDefault() {
+        try {
+            Integer aid = 10;
+            Integer uid = 11;
+            String username = "系统管理员";
+            addressService.setDefault(aid, uid, username);
+            System.out.println("OK.");
+        } catch (ServiceException e) {
+            System.out.println(e.getClass().getSimpleName());
+            System.out.println(e.getMessage());
+        }
+    }
+
+    @Test
+    public void delete() {
+        try {
+            Integer aid = 5;
+            Integer uid = 12;
+            String username = "张三";
+            addressService.delete(aid, uid, username);
+            System.out.println("OK.");
+        } catch (ServiceException e) {
+            System.out.println(e.getClass().getSimpleName());
+            System.out.println(e.getMessage());
         }
     }
 }

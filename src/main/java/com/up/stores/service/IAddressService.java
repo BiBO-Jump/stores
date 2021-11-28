@@ -10,4 +10,8 @@ public interface IAddressService {
     void addNewAddress(Integer uid, String username, Address address);
 //    查询某用户的收货地址列表数据
     List<Address> getByUid(Integer uid);
+//    设置默认收货地址
+    void setDefault(Integer aid, Integer uid, String username);
+//    删除收货地址
+    void delete(Integer aid, Integer uid, String username);
 }

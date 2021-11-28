@@ -408,46 +408,6 @@
 				});
 			}
 		</script>
-		<script type="text/javascript">
-			$(document).ready(function () {
-				showAddressList();
-			});
 
-			function showAddressList() {
-				$("#address-list").empty();
-				$.ajax({
-					url: "/addresses",
-					type: "GET",
-					dataType: "JSON",
-					success: function (json) {
-						let list = json.data;
-						for (let i = 0; i < list.length; i++) {
-							console.log(list[i].name);
-							let address = '<tr>'
-									+ '<td>#{tag}</td>'
-									+ '<td>#{name}</td>'
-									+ '<td>#{province}#{city}#{area}#{address}</td>'
-									+ '<td>#{phone}</td>'
-									+ '<td><a class="btn btn-xs btn-info"><span class="fa fa-edit"></span> 修改</a></td>'
-									+ '<td><a class="btn btn-xs add-del btn-info"><span class="fa fa-trash-o"></span> 删除</a></td>'
-									+ '<td><a class="btn btn-xs add-def btn-default">设为默认</a></td>'
-									+ '</tr>';
-
-							address = address.replace(/#{aid}/g, list[i].aid);
-							address = address.replace(/#{tag}/g, list[i].tag);
-							address = address.replace("#{name}", list[i].name);
-							address = address.replace("#{province}", list[i].provinceName);
-							address = address.replace("#{city}", list[i].cityName);
-							address = address.replace("#{area}", list[i].areaName);
-							address = address.replace("#{address}", list[i].address);
-							address = address.replace("#{phone}", list[i].phone);
-
-							$("#address-list").append(address);
-						}
-						$(".add-def:eq(0)").hide();
-					}
-				});
-			}
-		</script>
 	</body>
 </html>
