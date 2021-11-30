@@ -21,7 +21,7 @@
 		<link rel="stylesheet" type="text/css" href="../css/footer.css" />
 		<link rel="stylesheet" type="text/css" href="../css/orderConfirm.css" />
 		<link rel="stylesheet" type="text/css" href="../css/cart.css" />
-		<script src="../js/orderConfirm.js" type="text/javascript" charset="utf-8"></script>
+<!--		<script src="../js/orderConfirm.js" type="text/javascript" charset="utf-8"></script>-->
 	</head>
 
 	<body>
@@ -249,6 +249,102 @@
 
 		</footer>
 		<!--页脚结束-->
-	</body>
+		<script type="text/javascript">
+			$(document).ready(function() {
+				showAddressList();
+				showCartList();
+			});
 
+			function showCartList() {
+				$("#cart-list").empty();
+				$.ajax({
+					url: "/carts/list",
+					data: location.search.substr(1),
+					type: "GET",
+					dataType: "JSON",
+					success: function(json) {
+						let list = json.data;
+						console.log("count=" + list.length);
+						let allCount = 0;
+						let allPrice = 0;
+						for (let i = 0; i < list.length; i++) {
+							console.log(list[i].title);
+							let tr = '<tr>'
+									+ '<td><img src="..#{image}collect.png" class="img-responsive" /></td>'
+									+ '<td><input type="hidden" name="cids" value="#{cid}" />#{title}</td>'
+									+ '<td>¥<span>#{realPrice}</span></td>'
+									+ '<td>#{num}</td>'
+									+ '<td>¥<span>#{totalPrice}</span></td>'
+									+ '</tr>';
+
+							tr = tr.replace(/#{cid}/g, list[i].cid);
+							tr = tr.replace(/#{image}/g, list[i].image);
+							tr = tr.replace(/#{title}/g, list[i].title);
+							tr = tr.replace(/#{realPrice}/g, list[i].realPrice);
+							tr = tr.replace(/#{num}/g, list[i].num);
+							tr = tr.replace(/#{totalPrice}/g, list[i].realPrice * list[i].num);
+
+							$("#cart-list").append(tr);
+
+							allCount += list[i].num;
+							allPrice += list[i].realPrice * list[i].num;
+						}
+						$("#all-count").html(allCount);
+						$("#all-price").html(allPrice);
+					}
+				});
+			}
+
+			function showAddressList() {
+				$("#address-list").empty();
+				$.ajax({
+					url: "/addresses",
+					type: "GET",
+					dataType: "JSON",
+					success: function(json) {
+						let list = json.data;
+						console.log("count=" + list.length);
+						for (let i = 0; i < list.length; i++) {
+							console.log(list[i].name);
+							let opt = '<option value="#{aid}">#{name} | #{tag} | #{province}#{city}#{area}#{address} | #{phone}</option>';
+
+							opt = opt.replace(/#{aid}/g, list[i].aid);
+							opt = opt.replace(/#{tag}/g, list[i].tag);
+							opt = opt.replace("#{name}", list[i].name);
+							opt = opt.replace("#{province}", list[i].provinceName);
+							opt = opt.replace("#{city}", list[i].cityName);
+							opt = opt.replace("#{area}", list[i].areaName);
+							opt = opt.replace("#{address}", list[i].address);
+							opt = opt.replace("#{phone}", list[i].phone);
+
+							$("#address-list").append(opt);
+						}
+					}
+				});
+			}
+
+			$("#btn-create-order").click(function() {
+				let aid = $("#address-list").val();
+				let cids = location.search.substr(1);
+				$.ajax({
+					url: "/orders/create",
+					type: "GET",
+					data: "aid="+aid + "&" +cids,
+					dataType: "JSON",
+					success: function(json) {
+						if (json.state == 200) {
+							location.href = "payment.html";
+							alert("订单创建成功");
+							console.log(json.data)
+						}
+					},
+					error: function(xhr) {
+						alert("您的登录信息已经过期，请重新登录！HTTP响应码：" + xhr.status);
+						location.href = "login.html";
+					}
+				});
+			});
+		</script>
+
+	</body>
 </html>

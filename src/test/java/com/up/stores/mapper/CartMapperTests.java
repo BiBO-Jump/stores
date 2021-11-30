@@ -52,4 +52,14 @@ public class CartMapperTests {
         Cart result = cartMapper.findByCid(cid);
         System.out.println(result);
     }
+
+    @Test
+    public void findVOByCids() {
+        Integer[] cids = {1, 2, 3, 4, 5, 6, 7};
+        List<CartVO> list = cartMapper.findVOByCids(cids);
+        System.out.println("count=" + list.size());
+        for (CartVO item : list) {
+            System.out.println(item);
+        }
+    }
 }

@@ -147,7 +147,7 @@
 							<div class="form-group">
 								<label class="col-md-2 control-label">电话号码：</label>
 								<div class="col-md-8">
-									<input `id="phone" name="phone" type="text" class="form-control" placeholder="请输入电话号码" value="13311311313">
+									<input id="phone" name="phone" type="text" class="form-control" placeholder="请输入电话号码" value="">
 								</div>
 							</div>
 							<div class="form-group">
@@ -297,7 +297,7 @@
 					success: function(json) {
 						if (json.state == 200) {
 							alert("修改成功！");
-							location.href = "login.html";
+							location.href = "userdata.html";
 						} else {
 							alert("修改失败！" + json.message);
 						}

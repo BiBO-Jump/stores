@@ -298,7 +298,7 @@
 					success: function(json) {
 						if (json.state == 200) {
 							alert("新增收货地址成功！");
-
+							location.href = "address.html";
 						} else {
 							alert("新增收货地址失败！" + json.message);
 						}
@@ -403,6 +403,7 @@
 								let option = '<option value="' + list[i].code + '">' + list[i].name + '</option>';
 								$("#area-list").append(option);
 							}
+
 						}
 					}
 				});

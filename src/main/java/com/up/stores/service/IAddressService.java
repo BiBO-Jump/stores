@@ -14,4 +14,6 @@ public interface IAddressService {
     void setDefault(Integer aid, Integer uid, String username);
 //    删除收货地址
     void delete(Integer aid, Integer uid, String username);
+//根据收货地址数据的id，查询收货地址详情
+    Address getByAid(Integer aid, Integer uid);
 }

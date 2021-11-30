@@ -44,4 +44,29 @@ public class CartServiceTests {
             System.out.println(e.getMessage());
         }
     }
+
+    @Test
+    public void reduceNum() {
+        try {
+            Integer cid = 6;
+            Integer uid = 10;
+            String username = "管理员";
+            Integer num = cartService.reduceNum(cid, uid, username);
+            System.out.println("OK. New num=" + num);
+        } catch (ServiceException e) {
+            System.out.println(e.getClass().getSimpleName());
+            System.out.println(e.getMessage());
+        }
+    }
+
+    @Test
+    public void getVOByCids() {
+        Integer[] cids = {1,2,3,4,5,6};
+        Integer uid = 4;
+        List<CartVO> list = cartService.getVOByCids(uid, cids);
+        System.out.println("count=" + list.size());
+        for (CartVO item : list) {
+            System.out.println(item);
+        }
+    }
 }
