@@ -3,11 +3,8 @@ package com.up.stores.controller;
 import com.up.stores.controller.ex.*;
 import com.up.stores.entity.User;
 import com.up.stores.service.IUserService;
-import com.up.stores.service.ex.InsertException;
-import com.up.stores.service.ex.UsernameDuplicateException;
 import com.up.stores.until.JsonResult;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 

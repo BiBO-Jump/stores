@@ -144,7 +144,7 @@
 							<p><small><b>电脑商城</b>发货并提供售后服务,今日下单,明日送达</small></p>
 						</div>
 						<div class="col-md-12 form-space">
-							<input class="btn btn-primary btn-lg btn-block" type="button" value="立即购买">
+							<input class="btn btn-primary btn-lg btn-block" type="button" value="立即购买" onclick="location.href='orderConfirm.html'">
 						</div>
 						<div class="col-md-12 form-space">
 							<button id="btn-add-to-cart" type="button" class="btn btn-default go-cart"><span class="fa fa-cart-plus"></span> 加入购物车</button>
@@ -324,6 +324,7 @@
 				});
 			});
 
+
 			$("#btn-add-to-cart").click(function(){
 				$.ajax({
 					url: "/carts/add_to_cart",
@@ -336,6 +337,7 @@
 					success: function(json) {
 						if (json.state == 200) {
 							alert("加入购物车成功！");
+
 						} else {
 							alert("加入购物车失败！");
 						}
